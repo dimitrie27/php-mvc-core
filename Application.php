@@ -1,9 +1,9 @@
 <?php
 
-namespace app\core;
+namespace dim-mvc\phpmvc;
 
 use app\controllers\Controller;
-use app\core\db\Database;
+use dim-mvc\phpmvc\db\Database;
 use Exception;
 
 class Application 

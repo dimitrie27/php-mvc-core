@@ -1,8 +1,8 @@
 <?php
 
-namespace app\core;
+namespace dim-mvc\phpmvc;
 
-use app\core\db\DbModel;
+use dim-mvc\phpmvc\db\DbModel;
 
 abstract class UserModel extends DbModel
 {

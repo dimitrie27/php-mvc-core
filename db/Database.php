@@ -1,8 +1,8 @@
 <?php
 
-namespace app\core\db;
+namespace dim-mvc\phpmvc\db;
 
-use app\core\Application;
+use dim-mvc\phpmvc\Application;
 
 class Database
 {

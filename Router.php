@@ -1,9 +1,9 @@
 <?php
 
-namespace app\core;
+namespace dim-mvc\phpmvc;
 
 use app\controllers\Controller;
-use app\core\exception\NotFoundException;
+use dim-mvc\phpmvc\exception\NotFoundException;
 
 class Router 
 {   

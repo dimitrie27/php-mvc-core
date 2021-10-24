@@ -1,8 +1,8 @@
 <?php
 
-namespace app\core\form;
+namespace dim-mvc\phpmvc\form;
 
-use app\core\Model;
+use dim-mvc\phpmvc\Model;
 
 class Form 
 {
