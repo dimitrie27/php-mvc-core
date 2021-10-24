@@ -1,6 +1,6 @@
 <?php
 
-namespace dim-mvc\phpmvc;
+namespace dimmvc\phpmvc;
 
 class Request
 {

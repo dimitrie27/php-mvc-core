@@ -1,8 +1,8 @@
 <?php
 
-namespace dim-mvc\phpmvc\form;
+namespace dimmvc\phpmvc\form;
 
-use dim-mvc\phpmvc\Model;
+use dimmvc\phpmvc\Model;
 
 class InputField extends BaseField
 {

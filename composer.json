@@ -1,5 +1,5 @@
 {
-    "name": "dim-mvc/php-mvc-core",
+    "name": "dimmvc/php-mvc-core",
     "authors": [
         {
             "name": "dimitrie27",
@@ -9,7 +9,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "dim-mvc\\phpmvc\\": "."
+            "dimmvc\\phpmvc\\": "."
         }
     }
 }

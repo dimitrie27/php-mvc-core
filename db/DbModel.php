@@ -1,9 +1,9 @@
 <?php
 
-namespace dim-mvc\phpmvc\db;
+namespace dimmvc\phpmvc\db;
 
-use dim-mvc\phpmvc\Application;
-use dim-mvc\phpmvc\Model;
+use dimmvc\phpmvc\Application;
+use dimmvc\phpmvc\Model;
 
 abstract class DbModel extends Model
 {
