@@ -8,7 +8,8 @@ class View
 
     public function renderView($view, $params = [])
     {
-        $viewContent = $this->renderOnlyView($view, $params);
+        $viewModel = $this->renderOnlyView($view, $params);
+        $viewContent = $this->prepareView($viewModel, $params) ?? $viewModel;        
         $layoutContent = $this->layoutContent();
         return str_replace('{{content}}', $viewContent, $layoutContent);
     }
@@ -33,5 +34,19 @@ class View
         ob_start();
         include_once Application::$ROOT_DIR."/views/layouts/$layout.php";
         return ob_get_clean();
+    }
+
+    public function prepareView($view, $params)
+    {
+        $viewContent = null;
+        foreach ($params as $key => $value) {
+            if (strpos($view, '{{ ' . $key . ' }}')) {
+                $viewContent = str_replace('{{ ' . $key . ' }}', $value, $view);
+            } elseif (strpos($view, '{{' . $key . '}}')) {
+                $viewContent = str_replace('{{' . $key . '}}', $value, $view);
+            }
+        }
+        
+        return $viewContent;
     }
 }
