@@ -6,8 +6,7 @@ use dimmvc\phpmvc\Model;
 
 class Form 
 {
-
-    public static function begin($action, $method)
+    public static function begin($action = '/', $method = 'post')
     {
         echo sprintf('<form action="%s" method="%s">', $action, $method );
         return new Form();
@@ -18,7 +17,7 @@ class Form
         echo '</form>';
     }
 
-    public function field(Model $model, $attribute)
+    public static function field(Model $model, $attribute)
     {
         return new InputField($model, $attribute);
     }

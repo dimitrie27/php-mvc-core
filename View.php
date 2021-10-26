@@ -9,7 +9,8 @@ class View
     public function renderView($view, $params = [])
     {
         $viewModel = $this->renderOnlyView($view, $params);
-        $viewContent = $this->prepareView($viewModel, $params) ?? $viewModel;        
+        
+        $viewContent = $this->loadValues($viewModel, $params) ?? $viewModel;        
         $layoutContent = $this->layoutContent();
         return str_replace('{{content}}', $viewContent, $layoutContent);
     }
@@ -36,7 +37,7 @@ class View
         return ob_get_clean();
     }
 
-    public function prepareView($view, $params)
+    public function loadValues($view, $params)
     {
         $viewContent = null;
         foreach ($params as $key => $value) {
@@ -48,5 +49,19 @@ class View
         }
         
         return $viewContent;
+    }
+
+    public function prepareView($view)
+    {
+        preg_match_all('/{{ (.*?) }}/', $view, $matches);
+        foreach ($matches[0] as $item) {
+            $value = trim(str_replace('{{', '',str_replace('}}', '', $item)), ' ');
+            $separatorPosition = strpos($value, '.');
+            $name = substr($value, 0, $separatorPosition);
+            $callback = substr($value, $separatorPosition + 1, strlen($value));
+                    
+        }
+
+        return $view;
     }
 }

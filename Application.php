@@ -106,4 +106,9 @@ class Application
         return !self::$app->user;
     }
 
+    public static function isAdmin()
+    {
+        return (self::$app->user && self::$app->user->getRole() == 'ROLE_ADMIN');
+    }
+
 }
