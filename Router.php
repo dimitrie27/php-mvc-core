@@ -10,6 +10,7 @@ class Router
     public Request $request;
     public Response $response;
     protected array $routes = [];
+    protected array $params = [];
 
     public function __construct(Request $request, Response $response)
     {
@@ -17,7 +18,7 @@ class Router
         $this->response = $response;
     }
 
-    public function get($path, $callback)
+    public function get($path, $callback, $params = [])
     {
         $this->routes['get'][$path] = $callback;
     }
@@ -27,14 +28,36 @@ class Router
         $this->routes['post'][$path] = $callback;
     }
 
+    public function delete($path, $callback)
+    {
+        $this->routes['delete'][$path] = $callback;
+    }
+
     public function resolve()
     {
         $path = $this->request->getPath();
         $method = $this->request->method();
         $callback = $this->routes[$method][$path] ?? false;
+        $param = null;
         if ($callback === false) {
-            $this->response->setStatusCode(404);
-            throw new NotFoundException();
+            // check routes with dynamic param: ONLY 1 PARAMETER!!           
+            foreach (array_keys($this->routes[$method]) as $route) {
+                if (strpos($route, '{$')) {
+                    $paramKey = substr(
+                        $route,
+                        strpos($route, '{$'),
+                        strpos($route, '}', strpos($route, '{$'))
+                    );
+                    if (str_contains($path, str_replace($paramKey, '', $route))) {
+                        $callback = $this->routes[$method][$route];
+                        $param = str_replace(str_replace($paramKey, '', $route), '', $path);                        
+                    }
+                }
+            }   
+            if (!$param) {
+                $this->response->setStatusCode(404);
+                throw new NotFoundException();
+            }        
         }
 
         if (is_string($callback)) {
@@ -52,7 +75,8 @@ class Router
                 $middleware->execute();
             }
         }
-        return call_user_func($callback, $this->request, $this->response);
+
+        return call_user_func($callback, $this->request, $this->response, $param);
     }
 
 }

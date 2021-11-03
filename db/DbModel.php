@@ -4,10 +4,11 @@ namespace dimmvc\phpmvc\db;
 
 use dimmvc\phpmvc\Application;
 use dimmvc\phpmvc\Model;
+use Exception;
 
 abstract class DbModel extends Model
 {
-    abstract public function tableName(): string;
+    abstract public static function tableName(): string;
 
     abstract public function attributes(): array;
 
@@ -15,15 +16,37 @@ abstract class DbModel extends Model
 
     public function save()
     {
-        $tableName = $this->tableName(); 
-        $attributes = $this->attributes();
-        $params = array_map(fn($attr) => ":$attr", $attributes);
-        $statement = self::prepare("INSERT INTO $tableName (".implode(',', $attributes).")
-            VALUES(".implode(',', $params).")");
-        foreach ($attributes as $attr) {
-            $statement->bindValue(":$attr", $this->{$attr});
+        try {
+            $tableName = static::tableName(); 
+            $attributes = $this->attributes();
+            $params = array_map(fn($attr) => ":$attr", $attributes);
+            $statement = self::prepare("INSERT INTO $tableName (".implode(',', $attributes).")
+                VALUES(".implode(',', $params).")");
+            foreach ($attributes as $attr) {
+                $statement->bindValue(":$attr", $this->{$attr});
+            }
+            $statement->execute();
+        } catch (Exception $e) {
+            throw $e;           
         }
-        $statement->execute();
+        return true;
+    }
+    
+    public function update($id)
+    {
+        try {
+            $tableName = static::tableName(); 
+            $attributes = $this->attributes();
+            foreach ($attributes as $attr) {
+                $updateClause[] = $attr . ' = \'' . $this->{$attr} . '\'';
+            }
+
+            $statement = self::prepare("UPDATE $tableName SET " . implode(', ', $updateClause)
+                . " WHERE id = " . $id);
+            $statement->execute();
+        } catch (Exception $e) {
+            throw $e;           
+        }
         return true;
     }
 
@@ -46,6 +69,16 @@ abstract class DbModel extends Model
         }
 
         $statement->execute();
+
         return $statement->fetchObject(static::class);
+    }
+
+    public static function findAll()
+    {
+        $tableName = static::tableName();
+        $statement = self::prepare("SELECT * from $tableName");
+        $statement->execute();
+
+        return $statement->fetchAll();
     }
 }

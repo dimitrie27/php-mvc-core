@@ -37,15 +37,7 @@ class Application
         $this->controller = new Controller(); 
         $this->db = new Database($config['db']);
 
-        // fetch the user when navigate through pages
-        $primaryValue = $this->session->get('user');
-        if ($primaryValue) {
-            $userObj = new $this->userClass;
-            $primaryKey = $userObj->primaryKey();
-            $this->user = $userObj->findOne([$primaryKey => $primaryValue]);
-        } else {
-            $this->user = null;
-        }
+        $this->getLoggedUser();
     }
 
     public function run()
@@ -54,6 +46,7 @@ class Application
             echo $this->router->resolve();
         } catch (Exception $e) {
             $this->response->setStatusCode($e->getCode());
+            $this->controller->setLayout('main');
             echo $this->view->renderView('_error', [
                 'exception' => $e
             ]);
@@ -109,6 +102,18 @@ class Application
     public static function isAdmin()
     {
         return (self::$app->user && self::$app->user->getRole() == 'ROLE_ADMIN');
+    }
+
+    public function getLoggedUser()
+    {
+        $primaryValue = $this->session->get('user');
+        if ($primaryValue) {
+            $userObj = new $this->userClass;
+            $primaryKey = $userObj->primaryKey();
+            $this->user = $userObj->findOne([$primaryKey => $primaryValue]);
+        } else {
+            $this->user = null;
+        }
     }
 
 }

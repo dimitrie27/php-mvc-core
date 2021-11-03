@@ -9,7 +9,7 @@ class View
     public function renderView($view, $params = [])
     {
         $viewModel = $this->renderOnlyView($view, $params);
-        
+
         $viewContent = $this->loadValues($viewModel, $params) ?? $viewModel;        
         $layoutContent = $this->layoutContent();
         return str_replace('{{content}}', $viewContent, $layoutContent);

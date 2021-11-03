@@ -4,6 +4,7 @@ namespace dimmvc\phpmvc\middlewares;
 
 use dimmvc\phpmvc\Application;
 use dimmvc\phpmvc\exception\ForbiddenException;
+use dimmvc\phpmvc\Response;
 
 class AdminMiddleware extends BaseMiddleware
 {
