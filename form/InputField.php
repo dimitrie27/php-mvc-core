@@ -11,6 +11,7 @@ class InputField extends BaseField
     public const TYPE_NUMBER = 'number';
     public const TYPE_EMAIL = 'email';
     public string $type;
+    public string $customProp = '';
 
     public function __construct(Model $model, string $attribute)
     {
@@ -32,13 +33,22 @@ class InputField extends BaseField
         return $this;
     }
 
+    public function numberField()
+    {
+        $this->type = self::TYPE_NUMBER;
+        $this->customProp = 'min="0"';
+
+        return $this;
+    }
+
     public function renderInput(): string
     {
-        return sprintf('<input type="%s" name="%s" value="%s" class="form-control%s">',
+        return sprintf('<input type="%s" name="%s" value="%s" class="form-control%s" %s>',
             $this->type,
             $this->attribute,
             $this->model->{$this->attribute},
             $this->model->hasError($this->attribute) ? ' is-invalid' : '',
+            $this->customProp
         );
     }   
 }

@@ -22,4 +22,9 @@ class Form
         return new InputField($model, $attribute);
     }
 
+    public static function textareaField(Model $model, $attribute)
+    {
+        return new TextareaField($model, $attribute);
+    }
+
 }
